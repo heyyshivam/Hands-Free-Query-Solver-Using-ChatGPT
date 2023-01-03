@@ -1,0 +1,82 @@
+from pyChatGPT import ChatGPT
+import speech_recognition as sr
+import pyttsx3
+import time
+
+def callback(recognizer, audio):
+    global text
+    text = recognizer.recognize_google(audio)
+
+
+secret_token = "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..O4gJiEuYto5F6-TY.p_yVr6CZ69USu5zvO5XQ9d5eZEm86ume6PWMYNMJWNf0YNHwEPnxc8GEcgkGNJEv7os6ejJ11dULNRa_GxMp8p2RSq2MFGZ_wjrQU5ZogWxyhqV3botz1d_-C7PJo-rdTTWCEcsY0o324kuyv6e_oYAogPaNvf8XqTLqpp5eH_pDP3mRYSBbgFgkqp89Tm6Q6Ah_oEbQl3-FO3TFgs4jYFpOc0V01MCddLAtCHWKeQTt3LWCVdMZEZu53zjSrqfEAwSu1s6jcFxVISVqJkoGM2IJU3VhPFyrKVmZAeiJReuUnT0Y2uvr0ppP9XKAZFe_wsS2WUVif7qqSbtrWGLszM3a42n3l9424vd10MwlILaFyG0MCrvD-u_6LF6kJ_-RQWV5WnrWrEuiVTLxUjdsEjCXMz6ArBsxVS8iOXU4aUAr-hDemyQa6P3j-bw5dLlRSce_R648rPbt9wcoQOwKbUbe7NRXxDTSyF4pvvK13wTN8VaA6ozZuGle-B5HHz3DXrCqMOZ5DFeKyU6xeLOf_GJOxh9ZH0MZEM6cGXMChHhjaqDyLdwOhkbf_RHZWBW00rWcNdhdGjq1oh8KHBK-3CtHHnUdW8wHDCKMDk9eUD_yM5vHv7Rp5OV5K_vaWbwMcoNRwHnZmvLIQkiXFKZnOljvzMOVjddnFveu8iGnFcqFdMUmVjm0OIdONbkIGJrjS2_Mp9BJGLWh-6eONs_OYzHC1S5bOoupldyhDSjcQqDEaK54HlWeY1FIfP_MKBxM_2VHP5XQX0PuP_h5fAAMQsYqYJhZ3GrmjI5NDsevQo7uXMH_51fUzmReoZiw8wJYlaJ4r4ZtPcEMkdQTITtGlcxZokzowXasTwCYRFBcgFuc8cs-e7hd8rw6Jd1wWDX8lpAFyfoTFBrjD7hScK1VKHjDo0YbOTL0h3cGE4liDN7Jhi5ptjV74i8KcMm6Ih-j6MNPinbikWZjieJIK0a_5gIYiDv2l0dvuNyaZwEd0vcGPSfreP8YCeANenvosKm1N-7E5NX_DdpN6n98Eml0fnDSb0ULvWXK2mwzKGzmPnvLm4gRecwNFH4-3EbaVA8BzXCM7h6xUWDxSJPQK39Q3p9wBlaJ-CM_TdXKYiQapLNohwyieJ--2MMd9ZvocSguVIPhqv9v8C0nuGMhFPWQpiyHUPAkaLYtX20PZpcGEqTzIHjzB3SiPNKMg1y6mGnoDW9SFY9BhGufzneOGpQl8_eLXdX3mmM5ZvyW6DRVXwFeFMYdMTuzr3bVmBWMm35CBxLUYxRCdLgVCVfCL3IcmxaT7SOfT1rOcsck6CUIp9zjdo-1-AeULoieRnps0gnRWk30quK6pxPQkIck6oBnJLiOQFiNp-QjeTSsbyByO5CeCH05oCst3c5TbixvL8nBgrMWocTcmeuJ_t99ys1WACZwIyF1kkNbXCcw_KLQ50PWjI8Ypg-pAQoatiK8voZk0uljANgkMetXs4dAxTN_B-vLm2B2WsicyFUMpQ-ea06Lvd6ZFXPccdBO_ALmOQ5tn2I_sdP0iuaeQK8klp5dG2t_ZeUBy6Fc46vCcvKCFjfhl_2gofkiqceMWFOgrwXFX4L6vzEBNTlzV-Vvit-mt2_vE77Z1FwBkRXoj0VptNwVvGGmXNG83gdmT-wJk4ruFIu_1DJHQGT1cR_hj6eVnYJB-sNX5s-OZ0oXmBZlpoiNhxBLSWImATAb3W3SnAgl1WherI2bDHBl9ZasTQb8fAApMCOZOo3EV9ujeW65PhKgsZhtcRUb_x_uAMK0RTPodcAfoywL088KLgDOFCq0XrsiBUHdHyhE-MJ6tetMhFwXRes0dReb5acmwT4BhEihjzBRneNgahuRqNPKT5B54hSTIHKhGvKVt87SKfuAKq0u7p6Aew2uddQwp0h1NZPucVivbjj8FbJBpGX_KOSTxje6s5D6QcOziK1HhBAHtW9dMxLldXsEKlHqMUaJRdh9IjJYe2oJYM3ohq6enUt9go32JoMUQPWYJaOsDuPADjKY81x3qyr7zqSZNlkLzv3E3rFCH8yMcHv-tSoXfaT12K7GZUndanIYTyCViU-LdfxTpk_MUnlLH-ZbSzsRni0LBIWJ1MRrx13s5D4QG99QPzle5QUi_885ziWZDsyPorjAWz2f-Wwx2BhStrlN3f9oEtYV1KXC-C42uMg4Wr25_HtMyx9d5P8vofMvGShfszxuWWwUEIf93AAlbs1laOs06Zz3z1T11G4xavXOgcQoV_xCQwKE45B8wWfWnEc-z2ZGDTY2h_9RXg.BK2Yvs8Vp1ciclA4cCsySg" # Enter your session token here!
+
+# initialize the recognizer
+r = sr.Recognizer()
+
+text = ""
+trigger = "hey alexa"
+mic = sr.Microphone()
+while (True):     
+
+    with mic as source:
+        r.adjust_for_ambient_noise(source)  
+
+    stop_listening = r.listen_in_background(mic,callback)
+
+    for _ in range (50):
+        print("")
+        time.sleep(0.1)
+
+    stop_listening()
+
+    engine = pyttsx3.init()
+
+    rate = engine.getProperty('rate')   # getting details of current speaking rate
+    print (rate)                        #printing current voice rate
+    engine.setProperty('rate', 125)     # setting up new voice rate
+
+    """VOLUME"""
+    volume = engine.getProperty('volume')   #getting to know current volume level (min=0 and max=1)
+    print (volume)                          #printing current volume level
+    engine.setProperty('volume',1.0)    # setting up volume level  between 0 and 1
+
+    """VOICE"""
+    voices = engine.getProperty('voices')       #getting details of current voice
+    #engine.setProperty('voice', voices[0].id)  #changing index, changes voices. o for male
+    engine.setProperty('voice', voices[1].id)   #changing index, changes voices. 1 for female
+
+    # now checking trigger word 
+    if text.lower() == trigger.lower():
+            
+        print("Listening")
+
+        r = sr.Recognizer()
+
+        def callback(recognizer, audio):
+            global text
+            text = recognizer.recognize_google(audio)
+            
+        mic = sr.Microphone()
+        with mic as source:
+            r.adjust_for_ambient_noise(source)  
+
+        stop_listening = r.listen_in_background(mic,callback)
+
+        for _ in range (50):
+            print("")
+            time.sleep(0.1)
+
+        stop_listening()
+
+        # print(text)
+
+        # Pass the generated text to Audio
+        chatgpt_api = ChatGPT(secret_token)
+        resp = chatgpt_api.send_message(text)
+        out_result = resp['message']
+
+        print(resp['message'])
+
+
+        engine.say(resp['message'])
+        engine.runAndWait()
